@@ -1,0 +1,4 @@
+Country {
+    code: string { @Id };
+    label: string ;
+}

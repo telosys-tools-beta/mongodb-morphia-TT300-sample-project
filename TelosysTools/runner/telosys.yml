@@ -1,0 +1,28 @@
+config:
+  rootFolder: /Users/ludovicchaboud/Code/workspace_telosys/telosys-tools-dsl-runner/sample2
+  dslFolder: TelosysTools/model
+  bundleName: morphia-templates
+
+templates:
+  bean_mongo.vm:
+    file: ${BEANNAME}.java
+    folder: ${SRC}/${ENTITY_PKG}
+  repo_mongo.vm:
+    file: ${BEANNAME}Dao.java
+    folder: ${SRC}/${ROOT_PKG}/dao
+  repo_mongo_test.vm:
+    file: ${BEANNAME}DaoTest.java
+    folder: ${TEST_SRC}/${ROOT_PKG}/dao
+  pom_xml.vm:
+    file: pom.xml
+    folder:
+
+generations:
+  - entities:
+      - Employee
+      - Country
+    templates:
+      - bean_mongo.vm
+      - repo_mongo.vm
+      - repo_mongo_test.vm
+      - pom_xml.vm
