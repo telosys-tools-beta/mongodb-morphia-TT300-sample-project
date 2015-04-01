@@ -1,0 +1,1 @@
+java -jar telosys-tools-dsl-runner.jar
