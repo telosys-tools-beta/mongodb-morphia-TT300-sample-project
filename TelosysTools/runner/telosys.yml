@@ -1,5 +1,5 @@
 config:
-  rootFolder: /Users/ludovicchaboud/Code/workspace_telosys/telosys-tools-dsl-runner/sample2
+  rootFolder: /Users/ludovicchaboud/Code/workspace_telosys/mongo_morphia
   dslFolder: TelosysTools/model
   bundleName: morphia-templates
 

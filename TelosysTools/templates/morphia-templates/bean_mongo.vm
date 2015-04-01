@@ -20,9 +20,6 @@ import $import;
 
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
-#if( $hasNotEmbedded )
-import org.mongodb.morphia.annotations.Reference;
-#end
 
 /**
 * Entity bean
@@ -43,9 +40,12 @@ public class $entity.name implements Serializable
 #end
 #foreach( $link in $entity.links )
 #if( ! $link.isEmbedded )
-    @Reference
+#foreach( $targetKeyAttribute in $link.targetEntity.keyAttributes )
+    private $targetKeyAttribute.type ${fn.uncapitalize($link.targetEntity.name)}${fn.capitalize($targetKeyAttribute.name)};
 #end
+#else
     private $link.fieldType $link.fieldName;
+#end
 #end
 
     /**
@@ -80,6 +80,36 @@ public class $entity.name implements Serializable
     #end
 #end
 #foreach( $link in $entity.links )
+#if( ! $link.isEmbedded )
+#foreach( $targetKeyAttribute in $link.targetEntity.keyAttributes )
+#set( $linkKeyAttributeName = $fn.uncapitalize($link.targetEntity.name) + $fn.capitalize($targetKeyAttribute.name) )
+#set( $linkKeyAttributeType = $fn.capitalize($targetKeyAttribute.type) )
+#set( $linkKeyAttributeSetter = "set" + $fn.capitalize($link.targetEntity.name) + $fn.capitalize($targetKeyAttribute.name) )
+#set( $linkKeyAttributeGetter = "get" + $fn.capitalize($link.targetEntity.name) + $fn.capitalize($targetKeyAttribute.name) )
+    #if ( $link.setter )
+
+    /**
+    * Set the "$linkKeyAttributeName" link value
+    * @param $linkKeyAttributeName
+    */
+    public void ${linkKeyAttributeSetter}( $linkKeyAttributeType $linkKeyAttributeName )
+    {
+        this.$linkKeyAttributeName = $linkKeyAttributeName;
+    }
+    #end
+    #if ( $link.getter )
+
+    /**
+    * Get the "$linkKeyAttributeName" link value
+    * @return the link value
+    */
+    public ${linkKeyAttributeType} ${linkKeyAttributeGetter}()
+    {
+        return this.$linkKeyAttributeName;
+    }
+    #end
+#end
+#else
     #if ( $link.setter )
 
     /**
@@ -102,6 +132,7 @@ public class $entity.name implements Serializable
         return this.$link.fieldName;
     }
     #end
+#end
 #end
 
 $java.toStringMethod($entity, 4)
